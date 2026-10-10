@@ -315,7 +315,7 @@ QString Generator::valueAssignmentCode(
 	case Tag::Double: return QString("%1").arg(value.Double());
 	case Tag::Pixels: {
 		if (kWideMultiplicable.contains(name)) {
-			return QString("AyuUiSettings::getWideMultiplied(%1, %2)").arg(pxValueName(value.Int())).arg(kWideMultiplicable.at(name));
+			return QString("JelUiSettings::getWideMultiplied(%1, %2)").arg(pxValueName(value.Int())).arg(kWideMultiplicable.at(name));
 		}
 		return pxValueName(value.Int());
 	} break;
@@ -338,7 +338,7 @@ QString Generator::valueAssignmentCode(
 	case Tag::Size: {
 		auto v(value.Size());
 		if (kWideMultiplicable.contains(name)) {
-			return QString("{ AyuUiSettings::getWideMultiplied(%1, %3), AyuUiSettings::getWideMultiplied(%2, %3) }").arg(pxValueName(v.width), pxValueName(v.height)).arg(kWideMultiplicable.at(name));
+			return QString("{ JelUiSettings::getWideMultiplied(%1, %3), JelUiSettings::getWideMultiplied(%2, %3) }").arg(pxValueName(v.width), pxValueName(v.height)).arg(kWideMultiplicable.at(name));
 		}
 		return QString("{ %1, %2 }").arg(pxValueName(v.width), pxValueName(v.height));
 	} break;
@@ -664,7 +664,7 @@ bool Generator::writeIncludesInSource() {
 	for (const auto &base : includes) {
 		source_->include("styles/" + base + ".h");
 	}
-	const auto ayuIncluded = !module_.enumVariables([=](const Variable &value) -> bool
+	const auto jelIncluded = !module_.enumVariables([=](const Variable &value) -> bool
 	{
 		for (const auto &name : value.name) {
 			if (kWideMultiplicable.contains(name)) {
@@ -673,8 +673,8 @@ bool Generator::writeIncludesInSource() {
 		}
 		return true;
 	});
-	if (ayuIncluded) {
-		source_->include("ayu/ayu_ui_settings.h");
+	if (jelIncluded) {
+		source_->include("jel/jel_ui_settings.h");
 	}
 	source_->newline();
 	return result;
